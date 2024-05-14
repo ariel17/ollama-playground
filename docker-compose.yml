@@ -24,7 +24,6 @@ services:
     ports:
       - 8080:8080
       - 11435:11435
-      - 4000:4000
     environment:
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       WEBUI_SECRET_KEY: t00s3cr3t
