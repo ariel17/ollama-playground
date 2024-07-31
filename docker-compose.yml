@@ -1,24 +1,8 @@
 ---
 services:
-  redis:
-    image: redis
-    ports:
-      - 6379:6379
-    restart: unless-stopped
-    command: redis-server --save 20 1 --loglevel warning --requirepass 1234567890
-
-  postgres:
-    image: postgres
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1234567890
-      - POSTGRES_DB=litellm
-    ports:
-      - 5432:5432
-
   open-webui:
     image: ghcr.io/open-webui/open-webui
+    pull_policy: always
     volumes:
       - .open-webui:/app/backend/data
     ports:
@@ -28,16 +12,10 @@ services:
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       WEBUI_SECRET_KEY: t00s3cr3t
       ENABLE_SIGNUP: false
-      ENABLE_LITELLM: true
-      LITELLM_PROXY_PORT: 11435
-      LITELLM_PROXY_HOST: 0.0.0.0
       CHUNK_SIZE: 512
       CHUNK_OVERLAP: 50
-      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
-      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}        
+      # LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
+      # LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}        
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped
-    depends_on:
-      - redis
-      - postgres
