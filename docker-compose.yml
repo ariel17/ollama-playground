@@ -4,14 +4,23 @@ services:
     image: searxng/searxng:latest
     pull_policy: always
     container_name: searxng
-    ports:
-      - "8080:8080"
     volumes:
       - ./searxng:/etc/searxng
-    restart: always
+    restart: unless-stopped
+
+  tts:
+    image: ghcr.io/matatonic/openedai-speech
+    container_name: openedai-speech
+    env_file: .tts-env
+    ports:
+      - 8000:8000
+    volumes:
+      - ./tts/voices:/app/voices
+      - ./tts/config:/app/config
+    restart: unless-stopped
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui
+    image: ghcr.io/open-webui/open-webui:main
     pull_policy: always
     container_name: open-webui
     volumes:
@@ -25,13 +34,13 @@ services:
       ENABLE_SIGNUP: false
       CHUNK_SIZE: 512
       CHUNK_OVERLAP: 50
-      # LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
-      # LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}        
       ENABLE_RAG_WEB_SEARCH: true
       RAG_WEB_SEARCH_ENGINE: "searxng"
       RAG_WEB_SEARCH_RESULT_COUNT: 3
       RAG_WEB_SEARCH_CONCURRENT_REQUESTS: 10
-      SEARXNG_QUERY_URL: "http://searxng:8080/search?q=<query>"
+      SEARXNG_QUERY_URL: http://searxng:8080/search?q=<query>
+      AUTOMATIC1111_BASE_URL: http://host.docker.internal:7860/
+      ENABLE_IMAGE_GENERATION: true
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped
