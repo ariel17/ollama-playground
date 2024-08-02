@@ -15,8 +15,8 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./tts/voices:/app/voices
-      - ./tts/config:/app/config
+      - .tts/voices:/app/voices
+      - .tts/config:/app/config
     restart: unless-stopped
 
   open-webui:
@@ -30,8 +30,7 @@ services:
       - 11435:11435
     environment:
       OLLAMA_BASE_URL: http://host.docker.internal:11434
-      WEBUI_SECRET_KEY: t00s3cr3t
-      ENABLE_SIGNUP: false
+      ENABLE_SIGNUP: true
       CHUNK_SIZE: 512
       CHUNK_OVERLAP: 50
       ENABLE_RAG_WEB_SEARCH: true
