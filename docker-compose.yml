@@ -38,8 +38,8 @@ services:
       RAG_WEB_SEARCH_RESULT_COUNT: 3
       RAG_WEB_SEARCH_CONCURRENT_REQUESTS: 10
       SEARXNG_QUERY_URL: http://searxng:8080/search?q=<query>
-      AUTOMATIC1111_BASE_URL: http://host.docker.internal:7860/
-      ENABLE_IMAGE_GENERATION: true
+      ENABLE_IMAGE_GENERATION: True
+      COMFYUI_BASE_URL: http://host.docker.internal:7860/
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped
